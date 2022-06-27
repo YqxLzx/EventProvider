@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "strict": false,
+    "module": "ES2015",
+    "outDir": "dist",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "moduleResolution":"Node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src/**/*","main.tsx"],
+  "exclude": ["node_modules", "**/*.spec.ts","dist"]
+}
