@@ -8,21 +8,17 @@ import serve from 'rollup-plugin-serve'
 import replace from 'rollup-plugin-replace';
 import babel from "@rollup/plugin-babel";
 import builtins from 'rollup-plugin-node-builtins';
-import { terser } from "rollup-plugin-terser";
-import pkg from './package.json'
 const extensions = ['.js', '.ts', '.tsx', '.json']
 const env = process.env.NODE_ENV
-let distPath = 'bundle.min.js'
-console.log(env,'pro')
+let bundleName = 'bundle.js'
+console.log(env,'dev')
 export default {
   input: "main.tsx",
-  external: Object.keys(pkg.peerDependencies || {}).concat('react-dom'),
   output: [
     {
-      file: 'dist/' + distPath,
-      format: "esm",
+      file: 'dist/' + bundleName,
+      format: "umd",
       sourcemap: true,
-      plugins:[terser()]
     },
   ],
   plugins: [
@@ -34,7 +30,27 @@ export default {
     replace({
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
+    //replace(),
+    html({
+      template:() => `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta http-equiv="X-UA-Compatible" content="IE=edge">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Document</title>
+      </head>
+      <body>
+          <div id="root"></div>
+          <script src='${bundleName}' ></script>
+      </body>
+      </html>`,
+    },
+
+    ),
     peerDepsExternal(),
     typescript(),
+    serve('dist')
   ]
 };
